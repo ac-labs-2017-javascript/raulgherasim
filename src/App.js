@@ -22,30 +22,76 @@ function appLogic(state, action){
 function render(dispatch, getState){
   return function(action){
     ReactDOM.render(
-      <App state={getState()}/>,
+      <App store={{getState, dispatch}}/>,
       document.getElementById('root')
     );
     return dispatch(action);
   }
 }
 
-var store = new Store({ counter : 0 }, appLogic);
+var store = new Store({
+  pizzas:[{
+    title: 'asd',
+    ingredients: '123',
+    url: 'http://www.pizzahut-tt.com/wp-content/uploads/2013/06/pizza-hut-trinidad-and-tobago-supreme-lovers.png'
+  },
+  {
+    title: 'assd',
+    ingredients: '123',
+    url: 'http://www.pizzahut-tt.com/wp-content/uploads/2013/06/pizza-hut-trinidad-and-tobago-supreme-lovers.png'
+  },
+  {
+    title: 'aasd',
+    ingredients: '123',
+    url: 'http://www.pizzahut-tt.com/wp-content/uploads/2013/06/pizza-hut-trinidad-and-tobago-supreme-lovers.png'
+  },
+  {
+    title: 'a2sd',
+    ingredients: '123',
+    url: 'http://www.pizzahut-tt.com/wp-content/uploads/2013/06/pizza-hut-trinidad-and-tobago-supreme-lovers.png'
+  }
+]
+}, appLogic);
 store = wrapStore(store, [render]);
 
-function Hello({name, counter}){
+
+
+const divstyle={
+  margin: '0px',
+  padding: '0px'
+
+}
+function PizzaCard({url, title, ingredients}){
+
   return (
-    <div>
-      <div>Hello {name} {counter}</div>
-      <button onClick={()=>store.dispatch({type : "INC"})}>Click me! (Inc)</button>
-      <button onClick={()=>store.dispatch({type : "DEC"})}>Click me! (Dec)</button>
+    <div className="col-md-2" style={{marginTop: '5px'}}>
+      <div className="panel panel-default ">
+        <div className="panel-heading" style={{padding:'0px'}}>
+          <img className="img-responsive"src={url}/>
+        </div>
+        <div className="panel-body">
+          <h4>{title}</h4>
+          <h5>{ingredients}</h5>
+        </div>
+      </div>
     </div>
-  );
+  )
 }
 
-function App({state}){
+
+function App({store}){
+  const pizzas=store.getState().pizzas;
+
   return (
     <div className="App">
-      <Hello name="Boogie" counter={state.counter}/>
+      <div className="col-md-12" style={divstyle}>
+        <div className="col-md-12"style={{backgroundColor: '#dfdfdf',padding: '0px'}}>
+          <h1>Pizza meniul sef la meniuri</h1>
+        </div>
+        {pizzas.map(function(pizza){
+            return ( <PizzaCard url={pizza.url} title={pizza.title} ingredients={pizza.ingredients}/> );
+          })}
+      </div>
     </div>
   );
 }
